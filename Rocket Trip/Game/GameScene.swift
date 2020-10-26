@@ -142,7 +142,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createBackground() {
         for i in 0...3 {
-            background = SKSpriteNode(imageNamed: "gameBackground2")
+            background = SKSpriteNode(imageNamed: "gameBackground")
             background.name = "stars"
             background.size = self.size
             background.position = CGPoint(x: 0, y: CGFloat(i) * background.size.height)
