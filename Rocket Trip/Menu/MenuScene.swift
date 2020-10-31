@@ -39,7 +39,7 @@ class MenuScene: SKScene {
             difficultyLabelNode.text = "Easy"
         }
         
-        //arrowLeftButton.run(SKAction.hide())
+        arrowLeftButton.run(SKAction.hide())
         changeRocket()
     }
     
