@@ -19,9 +19,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var infoLabel: SKLabelNode!
     var bestScoreLabel: SKLabelNode!
     var motionManager = CMMotionManager()
-    var destX: CGFloat = 0.0
-    var counter:Int = 0
-    var seconds:Int = 0
+    var destX = 0.0
+    var counter = 0
+    var seconds = 0
     var points = 0 {
         didSet {
             scoreLabel.text = "\(points)"
