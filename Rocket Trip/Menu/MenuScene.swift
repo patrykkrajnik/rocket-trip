@@ -10,26 +10,28 @@ import SpriteKit
 
 class MenuScene: SKScene {
     var newGameButtonNode: SKSpriteNode!
+    
     var difficultyButtonNode: SKSpriteNode!
     var difficultyLabelNode: SKLabelNode!
+    
     var arrowLeftButton: SKSpriteNode!
     var arrowRightButton: SKSpriteNode!
-    var chooseRocket: SKSpriteNode!
     
+    var chooseRocket: SKSpriteNode!
     var numberOfRocket: Int = 1
+    
+    let userDefaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
         newGameButtonNode = (self.childNode(withName: "newGameButton") as! SKSpriteNode)
+        
         difficultyButtonNode = (self.childNode(withName: "difficultyButton") as! SKSpriteNode)
-        
-        arrowLeftButton = (self.childNode(withName: "arrowLeftButton") as! SKSpriteNode)
-        arrowLeftButton.run(SKAction.hide())
-        arrowRightButton = (self.childNode(withName: "arrowRightButton") as! SKSpriteNode)
-        chooseRocket = (self.childNode(withName: "chooseRocket") as! SKSpriteNode)
-        
         difficultyLabelNode = (self.childNode(withName: "difficultyLabel") as! SKLabelNode)
         
-        let userDefaults = UserDefaults.standard
+        arrowLeftButton = (self.childNode(withName: "arrowLeftButton") as! SKSpriteNode)
+        arrowRightButton = (self.childNode(withName: "arrowRightButton") as! SKSpriteNode)
+        
+        chooseRocket = (self.childNode(withName: "chooseRocket") as! SKSpriteNode)
         
         if userDefaults.bool(forKey: "hard") {
             difficultyLabelNode.text = "Hard"
@@ -37,13 +39,14 @@ class MenuScene: SKScene {
             difficultyLabelNode.text = "Easy"
         }
         
+        //arrowLeftButton.run(SKAction.hide())
         changeRocket()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         
-        if let location  = touch?.location(in: self) {
+        if let location = touch?.location(in: self) {
             let nodesArray = self.nodes(at: location)
             
             if nodesArray.first?.name == "newGameButton" {
@@ -74,9 +77,8 @@ class MenuScene: SKScene {
         }
     }
     
+    //Changing the difficulty of game
     func changeDifficulty() {
-        let userDefaults = UserDefaults.standard
-        
         if difficultyLabelNode.text == "Easy" {
             difficultyLabelNode.text = "Hard"
             userDefaults.set(true, forKey: "hard")
@@ -87,8 +89,8 @@ class MenuScene: SKScene {
         userDefaults.synchronize()
     }
     
+    //Changing the texture of Rocket
     func changeRocket() {
-        let userDefaults = UserDefaults.standard
         chooseRocket.texture = SKTexture(imageNamed: "flyingRocket\(numberOfRocket)")
         userDefaults.set(numberOfRocket, forKey: "numberOfRocket")
     }
