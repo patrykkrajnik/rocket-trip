@@ -40,12 +40,13 @@ class MenuScene: SKScene {
         if let location = touch?.location(in: self) {
             let nodesArray = self.nodes(at: location)
             
+            //Handling available buttons
             switch nodesArray.first?.name {
             case "newGameButton":
                 let transition = SKTransition.flipHorizontal(withDuration: 1.0)
                 let gameScene = SKScene(fileNamed: "GameScene") as! GameScene
                 gameScene.scaleMode = .aspectFill
-                gameScene.numberOfRocket = self.numberOfRocket
+                gameScene.numberOfRocket = numberOfRocket
                 view!.presentScene(gameScene, transition: transition)
             case "difficultyButton":
                 changeDifficulty()
@@ -71,7 +72,7 @@ class MenuScene: SKScene {
         }
     }
     
-    //Setting up all buttons
+    //Setting up all buttons and labels
     func setupButtonsAndLabels() {
         newGameButton = (childNode(withName: "newGameButton") as! SKSpriteNode)
         

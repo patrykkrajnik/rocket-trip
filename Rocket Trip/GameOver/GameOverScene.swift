@@ -26,6 +26,7 @@ class GameOverScene: SKScene {
         if let location = touch?.location(in: self) {
             let nodesArray = self.nodes(at: location)
             
+            //Handling available buttons
             switch nodesArray.first?.name {
             case "newGameButton":
                 let transition = SKTransition.flipHorizontal(withDuration: 1.0)
@@ -43,6 +44,7 @@ class GameOverScene: SKScene {
         }
     }
     
+    //Setting up all buttons and labels
     func setupButtonsAndLabels() {
         scoreLabel = (self.childNode(withName: "scoreLabel") as! SKLabelNode)
         newGameButtonNode = (self.childNode(withName: "newGameButton") as! SKSpriteNode)
