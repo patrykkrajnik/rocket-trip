@@ -11,25 +11,28 @@ import GameplayKit
 import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    var motionManager = CMMotionManager()
     
     var background = SKSpriteNode()
     var rocket = SKSpriteNode()
     var rock = SKSpriteNode()
+    
     var scoreLabel: SKLabelNode!
     var infoLabel: SKLabelNode!
     var bestScoreLabel: SKLabelNode!
-    var motionManager = CMMotionManager()
+    
     var destX: CGFloat = 0.0
-    var counter: Int = 0
-    var seconds: Int = 0
+    var counter = 0
+    var seconds = 0
+    var highestScoreEasy = 0
+    var highestScoreHard = 0
+    var numberOfRocket = 1
     var points = 0 {
         didSet {
             scoreLabel.text = "\(points)"
         }
     }
-    var highestScoreEasy:Int = 0
-    var highestScoreHard:Int = 0
-    var numberOfRocket: Int = 1
+    
     var accelerometer = false
     var startRockCreating = false
     var gameFinished = false
