@@ -18,7 +18,7 @@ class MenuScene: SKScene {
     var arrowRightButton: SKSpriteNode!
     
     var chooseRocket: SKSpriteNode!
-    var numberOfRocket: Int = 1
+    var numberOfRocket = 1
     
     let userDefaults = UserDefaults.standard
     
