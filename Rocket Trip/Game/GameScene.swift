@@ -207,7 +207,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let transition = SKTransition.flipHorizontal(withDuration: 1.0)
         let gameOver = SKScene(fileNamed: "GameOverScene") as! GameOverScene
         gameOver.scaleMode = .aspectFill
-        gameOver.score = self.points
+        gameOver.score = points
         view!.presentScene(gameOver, transition: transition)
     }
     

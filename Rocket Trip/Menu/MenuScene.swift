@@ -23,7 +23,7 @@ class MenuScene: SKScene {
     let userDefaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
-        setupButtons()
+        setupButtonsAndLabels()
         arrowLeftButton.run(SKAction.hide())
         changeRocket()
         
@@ -72,7 +72,7 @@ class MenuScene: SKScene {
     }
     
     //Setting up all buttons
-    func setupButtons() {
+    func setupButtonsAndLabels() {
         newGameButton = (childNode(withName: "newGameButton") as! SKSpriteNode)
         
         difficultyButton = (childNode(withName: "difficultyButton") as! SKSpriteNode)

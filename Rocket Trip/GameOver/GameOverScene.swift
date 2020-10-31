@@ -16,12 +16,8 @@ class GameOverScene: SKScene {
     var difficultyButtonNode: SKSpriteNode!
     
     override func didMove(to view: SKView) {
-        scoreLabel = (self.childNode(withName: "scoreLabel") as! SKLabelNode)
+        setupButtonsAndLabels()
         scoreLabel.text = "\(score)"
-        
-        newGameButtonNode = (self.childNode(withName: "newGameButton") as! SKSpriteNode)
-        difficultyButtonNode = (self.childNode(withName: "difficultyButton") as! SKSpriteNode)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -30,17 +26,26 @@ class GameOverScene: SKScene {
         if let location = touch?.location(in: self) {
             let nodesArray = self.nodes(at: location)
             
-            if nodesArray.first?.name == "newGameButton" {
+            switch nodesArray.first?.name {
+            case "newGameButton":
                 let transition = SKTransition.flipHorizontal(withDuration: 1.0)
                 let gameScene = SKScene(fileNamed: "GameScene")
                 gameScene!.scaleMode = .aspectFill
                 view!.presentScene(gameScene!, transition: transition)
-            } else if nodesArray.first?.name == "difficultyButton" {
+            case "difficultyButton":
                 let transition = SKTransition.flipHorizontal(withDuration: 1.0)
                 let menuScene = SKScene(fileNamed: "MenuScene")
                 menuScene!.scaleMode = .aspectFill
                 view!.presentScene(menuScene!, transition: transition)
+            default:
+                print("Unknown button")
             }
         }
+    }
+    
+    func setupButtonsAndLabels() {
+        scoreLabel = (self.childNode(withName: "scoreLabel") as! SKLabelNode)
+        newGameButtonNode = (self.childNode(withName: "newGameButton") as! SKSpriteNode)
+        difficultyButtonNode = (self.childNode(withName: "difficultyButton") as! SKSpriteNode)
     }
 }
