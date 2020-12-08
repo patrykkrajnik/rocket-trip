@@ -21,6 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var infoLabel: SKLabelNode!
     var bestScoreLabel: SKLabelNode!
     
+    //zmiany zmiany
     var destX: CGFloat = 0.0
     var counter = 0
     var seconds = 0
