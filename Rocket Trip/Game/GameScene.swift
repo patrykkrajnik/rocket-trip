@@ -21,7 +21,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var infoLabel: SKLabelNode!
     var bestScoreLabel: SKLabelNode!
     
-    //zmiany zmiany
     var destX: CGFloat = 0.0
     var counter = 0
     var seconds = 0
@@ -51,6 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         infoLabel.run(SKAction.hide())
         accelerometer = true
         startRockCreating = true
+        
         rocket.physicsBody?.affectedByGravity = true
         rocket.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
         rocket.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 300))
@@ -61,27 +61,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         motionManager.startAccelerometerUpdates()
         createBackground()
+        
         self.rocket = (self.childNode(withName: "//rocket") as? SKSpriteNode)!
         rocket.texture = SKTexture(imageNamed: "flyingRocket\(numberOfRocket)")
         self.infoLabel = (self.childNode(withName: "infoLabel") as! SKLabelNode)
-        //self.rock = (self.childNode(withName: "//rock") as? SKSpriteNode)!
+        
         rocket.physicsBody?.categoryBitMask = 1
         rocket.physicsBody?.collisionBitMask = 2
         rocket.physicsBody?.contactTestBitMask = 2
         
-        scoreLabel = SKLabelNode(text: "0")
-        scoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+100)
-        scoreLabel.fontName = "AmericanTypewriter-Bold"
-        scoreLabel.fontSize = 70
-        scoreLabel.fontColor = UIColor.yellow
-        self.addChild(scoreLabel)
-        
-        bestScoreLabel = SKLabelNode(text: "Best: ")
-        bestScoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+50)
-        bestScoreLabel.fontName = "AmericanTypewriter-Bold"
-        bestScoreLabel.fontSize = 30
-        bestScoreLabel.fontColor = UIColor.yellow
-        self.addChild(bestScoreLabel)
+        scoreLabelDesign()
+        bestScoreLabelDesign()
         
         if UserDefaults.standard.bool(forKey: "hard") {
             let savedScore: Int = UserDefaults.standard.integer(forKey: "highestScoreHard")
@@ -98,28 +88,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rocket.run(SKAction.moveTo(x: destX, duration: 1))
         sideConstraints()
         createRock()
-        setHighestScore()
         if self.gameFinished {
             rocket.run(SKAction.moveTo(x: rocket.position.x, duration: 1))
             motionManager.stopAccelerometerUpdates()
+            setHighestScore()
             endGame()
             return
         }
     }
     
+    func scoreLabelDesign() {
+        scoreLabel = SKLabelNode(text: "0")
+        scoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+100)
+        scoreLabel.fontName = "AmericanTypewriter-Bold"
+        scoreLabel.fontSize = 70
+        scoreLabel.fontColor = UIColor.yellow
+        self.addChild(scoreLabel)
+    }
+    
+    func bestScoreLabelDesign() {
+        bestScoreLabel = SKLabelNode(text: "Best: ")
+        bestScoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+50)
+        bestScoreLabel.fontName = "AmericanTypewriter-Bold"
+        bestScoreLabel.fontSize = 30
+        bestScoreLabel.fontColor = UIColor.yellow
+        self.addChild(bestScoreLabel)
+    }
+    
     func moveX() {
-        if accelerometer == true {
-            if motionManager.isAccelerometerAvailable {
-                motionManager.accelerometerUpdateInterval = 0.01
-                motionManager.startAccelerometerUpdates(to: .main) {
-                    (data, error) in
-                    guard let data = data, error == nil else {
-                        return
-                    }
-                    
-                    let currentX = self.rocket.position.x
-                    self.destX = currentX + CGFloat(data.acceleration.x * 3000)
+        if accelerometer == true && motionManager.isAccelerometerAvailable {
+            motionManager.accelerometerUpdateInterval = 0.01
+            motionManager.startAccelerometerUpdates(to: .main) {
+                (data, error) in
+                guard let data = data, error == nil else {
+                    return
                 }
+
+                let currentX = self.rocket.position.x
+                self.destX = currentX + CGFloat(data.acceleration.x * 3000)
             }
         }
     }
@@ -171,6 +177,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let xAxis = Int(arc4random_uniform(640))-640/2
         let yAxis = Int(1334)
         let rockSize = [80, 90, 100, 110, 120, 130, 140, 150]
+        
         if (startRockCreating == true) {
             if UserDefaults.standard.bool(forKey: "hard") {
                 counter += 1
@@ -210,6 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func endGame() {
         let transition = SKTransition.flipHorizontal(withDuration: 1.0)
         let gameOver = SKScene(fileNamed: "GameOverScene") as! GameOverScene
+        
         gameOver.scaleMode = .aspectFill
         gameOver.score = points
         view!.presentScene(gameOver, transition: transition)
@@ -217,6 +225,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func setHighestScore() {
         let userDefaults = UserDefaults.standard
+        
         if (points > userDefaults.integer(forKey: "highestScoreHard")) && userDefaults.bool(forKey: "hard") {
             highestScoreHard = points
             userDefaults.set(highestScoreHard, forKey: "highestScoreHard")
