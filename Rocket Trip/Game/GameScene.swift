@@ -38,7 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameFinished = false
     
     func didBegin(_ contact: SKPhysicsContact) {
-        self.gameFinished = true
+        gameFinished = true
         startRockCreating = false
         
         rocket.physicsBody?.affectedByGravity = false
@@ -57,19 +57,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        numberOfRocket = UserDefaults.standard.integer(forKey: "numberOfRocket")
-        self.physicsWorld.contactDelegate = self
+        physicsWorld.contactDelegate = self
         motionManager.startAccelerometerUpdates()
         createBackground()
-        
-        self.rocket = (self.childNode(withName: "//rocket") as? SKSpriteNode)!
-        rocket.texture = SKTexture(imageNamed: "flyingRocket\(numberOfRocket)")
-        self.infoLabel = (self.childNode(withName: "infoLabel") as! SKLabelNode)
-        
-        rocket.physicsBody?.categoryBitMask = 1
-        rocket.physicsBody?.collisionBitMask = 2
-        rocket.physicsBody?.contactTestBitMask = 2
-        
+        rocketProperties()
         scoreLabelDesign()
         bestScoreLabelDesign()
         
@@ -88,7 +79,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rocket.run(SKAction.moveTo(x: destX, duration: 1))
         sideConstraints()
         createRock()
-        if self.gameFinished {
+        if gameFinished {
             rocket.run(SKAction.moveTo(x: rocket.position.x, duration: 1))
             motionManager.stopAccelerometerUpdates()
             setHighestScore()
@@ -97,13 +88,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func rocketProperties() {
+        //design
+        numberOfRocket = UserDefaults.standard.integer(forKey: "numberOfRocket")
+        rocket = (childNode(withName: "rocket") as? SKSpriteNode)!
+        rocket.texture = SKTexture(imageNamed: "flyingRocket\(numberOfRocket)")
+        infoLabel = (childNode(withName: "infoLabel") as! SKLabelNode)
+        
+        //bit masks
+        rocket.physicsBody?.categoryBitMask = 1
+        rocket.physicsBody?.collisionBitMask = 2
+        rocket.physicsBody?.contactTestBitMask = 2
+    }
+    
     func scoreLabelDesign() {
         scoreLabel = SKLabelNode(text: "0")
         scoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+100)
         scoreLabel.fontName = "AmericanTypewriter-Bold"
         scoreLabel.fontSize = 70
         scoreLabel.fontColor = UIColor.yellow
-        self.addChild(scoreLabel)
+        addChild(scoreLabel)
     }
     
     func bestScoreLabelDesign() {
@@ -112,7 +116,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScoreLabel.fontName = "AmericanTypewriter-Bold"
         bestScoreLabel.fontSize = 30
         bestScoreLabel.fontColor = UIColor.yellow
-        self.addChild(bestScoreLabel)
+        addChild(bestScoreLabel)
     }
     
     func moveX() {
@@ -157,7 +161,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.size = self.size
             background.position = CGPoint(x: 0, y: CGFloat(i) * background.size.height)
             background.zPosition = -2
-            self.addChild(background)
+            addChild(background)
         }
     }
     
@@ -174,8 +178,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createRock() {
-        let xAxis = Int(arc4random_uniform(640))-640/2
-        let yAxis = Int(1334)
         let rockSize = [80, 90, 100, 110, 120, 130, 140, 150]
         
         if (startRockCreating == true) {
@@ -185,26 +187,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     counter += 1
                 }
             }
+            
             counter += 1
             countPoints()
+            
             if (counter%45 == 0) {
                 let size = rockSize.randomElement()
                 rock = SKSpriteNode(imageNamed: "rock")
+                
                 if (arc4random_uniform(5)<2) {
                     rock.physicsBody = SKPhysicsBody(circleOfRadius: 75)
                 } else {
                     rock.scale(to: CGSize(width: size!, height: size!))
                     rock.physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(size!)*0.5)
                 }
-                self.addChild(rock)
-                rock.position = CGPoint(x: xAxis, y: yAxis)
-                rock.physicsBody?.mass = 0.1
-                rock.physicsBody?.linearDamping = 1.0
-                rock.physicsBody?.categoryBitMask = 2
-                rock.physicsBody?.collisionBitMask = 1
-                rock.physicsBody?.contactTestBitMask = 1
+                
+                rockProperties()
+                addChild(rock)
+                rock.run(SKAction.sequence([SKAction.wait(forDuration: 5.0), SKAction.removeFromParent()]))
             }
         }
+    }
+    
+    func rockProperties() {
+        //position
+        let xAxis = Int(arc4random_uniform(640))-640/2
+        let yAxis = Int(1334)
+        rock.position = CGPoint(x: xAxis, y: yAxis)
+        
+        //physic
+        rock.physicsBody?.mass = 0.1
+        rock.physicsBody?.linearDamping = 1.0
+        
+        //bit masks
+        rock.physicsBody?.categoryBitMask = 2
+        rock.physicsBody?.collisionBitMask = 1
+        rock.physicsBody?.contactTestBitMask = 1
     }
     
     func countPoints() {
