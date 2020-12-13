@@ -59,6 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
         motionManager.startAccelerometerUpdates()
+        
         createBackground()
         rocketProperties()
         scoreLabelDesign()
@@ -79,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rocket.run(SKAction.moveTo(x: destX, duration: 1))
         sideConstraints()
         createRock()
+        
         if gameFinished {
             rocket.run(SKAction.moveTo(x: rocket.position.x, duration: 1))
             motionManager.stopAccelerometerUpdates()
@@ -88,19 +90,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Design and bit masks of Rocket
     func rocketProperties() {
-        //design
         numberOfRocket = UserDefaults.standard.integer(forKey: "numberOfRocket")
         rocket = (childNode(withName: "rocket") as? SKSpriteNode)!
         rocket.texture = SKTexture(imageNamed: "flyingRocket\(numberOfRocket)")
         infoLabel = (childNode(withName: "infoLabel") as! SKLabelNode)
         
-        //bit masks
         rocket.physicsBody?.categoryBitMask = 1
         rocket.physicsBody?.collisionBitMask = 2
         rocket.physicsBody?.contactTestBitMask = 2
     }
     
+    //Details of score design
     func scoreLabelDesign() {
         scoreLabel = SKLabelNode(text: "0")
         scoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+100)
@@ -110,6 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(scoreLabel)
     }
     
+    //Details of best score design
     func bestScoreLabelDesign() {
         bestScoreLabel = SKLabelNode(text: "Best: ")
         bestScoreLabel.position = CGPoint(x: (((self.scene?.size.width)!)/(-4))-50, y: (((self.scene?.size.height)!)/3)+50)
@@ -119,6 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bestScoreLabel)
     }
     
+    //Moving a Rocket at X axis
     func moveX() {
         if accelerometer == true && motionManager.isAccelerometerAvailable {
             motionManager.accelerometerUpdateInterval = 0.01
@@ -134,6 +138,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Setting limits of game area on the sides
     func sideConstraints() {
         let rightConstraint = size.width/2 - 70
         let leftConstraint = rightConstraint*(-1)
@@ -154,6 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Design of game background
     func createBackground() {
         for i in 0...3 {
             background = SKSpriteNode(imageNamed: "gameBackground")
@@ -165,6 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Make background moving
     func moveBackground() {
         self.enumerateChildNodes(withName: "stars", using: ({
             (node, error) in
@@ -177,6 +184,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }))
     }
     
+    //Creating rocks depending on chosen difficulty level
     func createRock() {
         let rockSize = [80, 90, 100, 110, 120, 130, 140, 150]
         
@@ -209,22 +217,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Design and physic properties of rocks
     func rockProperties() {
-        //position
         let xAxis = Int(arc4random_uniform(640))-640/2
         let yAxis = Int(1334)
         rock.position = CGPoint(x: xAxis, y: yAxis)
         
-        //physic
         rock.physicsBody?.mass = 0.1
         rock.physicsBody?.linearDamping = 1.0
         
-        //bit masks
         rock.physicsBody?.categoryBitMask = 2
         rock.physicsBody?.collisionBitMask = 1
         rock.physicsBody?.contactTestBitMask = 1
     }
     
+    //Counting the current score of player
     func countPoints() {
         seconds += 1
         if (seconds%60 == 0) {
@@ -232,6 +239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    //Switch to another scene when game finishes
     func endGame() {
         let transition = SKTransition.flipHorizontal(withDuration: 1.0)
         let gameOver = SKScene(fileNamed: "GameOverScene") as! GameOverScene
@@ -241,6 +249,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view!.presentScene(gameOver, transition: transition)
     }
     
+    //Set the new highest score if it is beaten
     func setHighestScore() {
         let userDefaults = UserDefaults.standard
         
