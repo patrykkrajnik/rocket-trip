@@ -22,7 +22,7 @@
 
 
 ## Usage
-Clone this repository, open at the Xcode and turn it on at your iPhone.
+Clone this repository, open at the Xcode and turn it on at your iPhone using `Command + R`.
 
 
 ## Rules
