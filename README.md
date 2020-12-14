@@ -16,8 +16,9 @@
 
 ## Features
 - Five types of different looking rockets
-- Two levels of difficulty
-- Steering the rocket by tilting a phone sideways
+- Two difficulty levels
+- Separated highest scores for both difficulty levels
+- Steering the rocket by tilting a phone sideways and touching a screen
 
 
 ## Usage
@@ -28,6 +29,7 @@ Clone this repository, open at the Xcode and turn it on at your iPhone.
 - Choose the difficulty and one of available rockets
 - Keep your rocket in game area by touching the screen
 - Steer the rocket on the sides by tiltig your phone
+- Avoid all rocks on your way
 - When you hit the rock, game finishes
 
 
