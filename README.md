@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="images/gitHeader.png" alt="Logo" width="80%">
+    <img src="images/gitHeader.png" alt="Logo" width="90%">
 </div>
 
 
@@ -9,8 +9,8 @@
 
 ## Screenshots
 <div align="center">
-    <img src="images/screenshotMenu.PNG" alt="Menu" width="30%">
-    <img src="images/screenshotGame.PNG" alt="Game" width="30%">
+    <img src="images/screenshotMenu.PNG" alt="Menu" width="35%">
+    <img src="images/screenshotGame.PNG" alt="Game" width="35%">
 </div>
 
 
